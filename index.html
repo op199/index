@@ -682,6 +682,73 @@
     footer { padding: 30px 20px; flex-direction: column; text-align: center; }
     .hero-stats { display: none; }
   }
+  /* ── CONVERSION BOOST (FORM) ── */
+.social-proof{
+  display:inline-block;
+  margin: 14px 0 18px;
+  padding: 10px 14px;
+  border: 1px solid rgba(232,75,42,0.25);
+  background: rgba(232,75,42,0.06);
+  font-size: 14px;
+  color: rgba(13,13,13,0.75);
+}
+.social-proof strong{ color: var(--accent); }
+
+.perk-row{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 0 26px;
+}
+.perk{
+  font-size: 12px;
+  padding: 6px 10px;
+  border: 1px solid rgba(13,13,13,0.15);
+  color: rgba(13,13,13,0.75);
+  background: rgba(255,255,255,0.35);
+}
+
+.field-wrap{
+  text-align:left;
+}
+.field-label{
+  display:block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px;
+  color: rgba(13,13,13,0.75);
+  text-transform: uppercase;
+}
+
+.or-divider{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 12px;
+  margin: 6px 0;
+  color: rgba(13,13,13,0.45);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.or-divider::before,
+.or-divider::after{
+  content:'';
+  height: 1px;
+  flex: 1;
+  background: rgba(13,13,13,0.15);
+}
+
+.privacy-note{
+  margin-top: 12px;
+  font-size: 12px;
+  color: rgba(13,13,13,0.55);
+}
+  .social-proof {
+  border-radius: 10px;
+}
 </style>
 </head>
 <body>
@@ -848,29 +915,53 @@
 <!-- FORM -->
 <section class="form-section" id="signup">
   <div class="form-inner">
-    <div class="section-label">Присоединяйся</div>
-    <div class="section-title">Будь первым.<br>Помоги другим.</div>
-    <p class="form-sub">
-      Оставь email или Telegram — сообщим когда сервис запустится.
-      Никакого спама.
-    </p>
+    <div class="section-label">Ранний доступ</div>
 
-    <form class="email-form" id="leadForm" action="https://formspree.io/f/mojnboae" method="POST">
-      
-      <input type="hidden" name="source" value="landing_chestnorabotayu">
-
-      <input class="email-input" type="email" name="email" placeholder="твой@email.ru">
-      <input class="email-input" type="text" name="telegram" placeholder="или Telegram (@username)">
-
-      <button class="submit-btn" type="submit">Хочу первым</button>
-    </form>
-
-    <div class="success-msg" id="successMsg">
-      🎉 Отлично! Мы напишем тебе при запуске.
+    <div class="section-title">
+      Получи доступ первым<br>
+      и узнай правду о работодателях
     </div>
 
+    <div class="social-proof" id="socialProof">
+      Уже <strong>17 человек</strong> записались за последние 3 дня
+    </div>
+
+    <p class="form-sub" style="margin-bottom: 22px;">
+      Мы пришлём 1 письмо: старт + подборку “куда идти / куда не идти” по твоему городу.
+    </p>
+
+    <div class="perk-row">
+      <span class="perk">✅ Без спама</span>
+      <span class="perk">✅ Анонимно</span>
+      <span class="perk">✅ Работодателям не передаём</span>
+    </div>
+
+    <form class="email-form" id="leadForm" action="https://formspree.io/f/mojnboae" method="POST">
+      <input type="hidden" name="source" value="landing_chestnorabotayu">
+
+      <div class="field-wrap">
+        <label class="field-label" for="emailField">Email</label>
+        <input class="email-input" id="emailField" type="email" name="email" placeholder="твой@email.ru">
+      </div>
+
+      <div class="or-divider"><span>или</span></div>
+
+      <div class="field-wrap">
+        <label class="field-label" for="tgField">Telegram</label>
+        <input class="email-input" id="tgField" type="text" name="telegram" placeholder="@username">
+      </div>
+
+      <button class="submit-btn" type="submit">Получить доступ</button>
+
+      <div class="privacy-note">
+        🔒 Контакты не передаются работодателям. Никогда.
+      </div>
+    </form>
+
+    <div class="success-msg" id="successMsg">🎉 Отлично! Мы напишем тебе при запуске.</div>
+
     <p class="form-note">
-      Можно оставить что-то одно: email или Telegram.
+      Если оставляешь Telegram — лучше в формате <strong>@username</strong>.
     </p>
   </div>
 </section>
@@ -942,6 +1033,38 @@ document.getElementById('leadForm').addEventListener('submit', async function(e)
     el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
     observer.observe(el);
   });
+  <script>
+  // ... твой текущий JS выше ...
+
+  // === Honest social proof ===
+  // Поставь сюда РЕАЛЬНОЕ число заявок из Formspree (Submissions -> считаешь)
+  const LEADS_COUNT = 1; // <-- меняешь только это число
+
+  (function updateSocialProof() {
+    const el = document.getElementById('socialProof');
+    if (!el) return;
+
+    if (!LEADS_COUNT || LEADS_COUNT <= 0) {
+      el.innerHTML = `Ранний доступ открыт. <strong>Запишись первым</strong>`;
+      return;
+    }
+
+    const word = pluralRu(LEADS_COUNT, ['человек', 'человека', 'человек']);
+    const display = LEADS_COUNT >= 50 ? `${LEADS_COUNT}+` : `${LEADS_COUNT}`;
+
+    // Без "за последние 3 дня" — это легко становится неправдой.
+    el.innerHTML = `Уже <strong>${display} ${word}</strong> записал${LEADS_COUNT === 1 ? 'ся' : 'ись'} на ранний доступ`;
+  })();
+
+  function pluralRu(n, forms) {
+    // forms: ['1', '2-4', '5+'] -> например ['человек','человека','человек']
+    const abs = Math.abs(n) % 100;
+    const last = abs % 10;
+    if (abs > 10 && abs < 20) return forms[2];
+    if (last > 1 && last < 5) return forms[1];
+    if (last === 1) return forms[0];
+    return forms[2];
+  }
 </script>
 </body>
 </html>
