@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЧестноРаботаю — отзывы о работодателях в общепите</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0d0d0d;
+    --white: #f5f0e8;
+    --cream: #ede8dc;
+    --accent: #e84b2a;
+    --accent2: #f5a623;
+    --gray: #2a2a2a;
+    --light-gray: #4a4a4a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Mulish', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(13,13,13,0.95), transparent);
+  }
+
+  .logo {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    color: var(--white);
+  }
+
+  .logo span { color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: var(--white);
+    border: none;
+    padding: 10px 24px;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .nav-cta:hover { background: #c93d20; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 50%, rgba(232,75,42,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(245,166,35,0.07) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245,240,232,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,240,232,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    border: 1px solid rgba(232,75,42,0.5);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: clamp(38px, 6vw, 80px);
+    line-height: 1.0;
+    letter-spacing: -2px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+    position: relative;
+  }
+
+  .hero h1 em::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: lineIn 0.6s 0.8s ease forwards;
+  }
+
+  @keyframes lineIn { to { transform: scaleX(1); } }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 300;
+    color: rgba(245,240,232,0.65);
+    line-height: 1.6;
+    max-width: 580px;
+    margin-bottom: 48px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--white);
+    border: 2px solid var(--accent);
+    padding: 16px 36px;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(232,75,42,0.3);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    border: 2px solid rgba(245,240,232,0.25);
+    padding: 16px 36px;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .hero-stats {
+    position: absolute;
+    right: 60px;
+    bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    animation: fadeUp 0.6s 0.5s ease both;
+  }
+
+  .stat {
+    text-align: right;
+    border-right: 3px solid var(--accent);
+    padding-right: 20px;
+  }
+
+  .stat-num {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: rgba(245,240,232,0.5);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    background: var(--accent);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .marquee-track {
+    display: inline-flex;
+    animation: marquee 25s linear infinite;
+  }
+
+  .marquee-item {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0 40px;
+    color: var(--white);
+  }
+
+  .marquee-dot {
+    color: rgba(255,255,255,0.4);
+    padding: 0 10px;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── PROBLEM ── */
+  .problem {
+    padding: 100px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: clamp(28px, 4vw, 52px);
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 60px;
+  }
+
+  .problems-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+  }
+
+  .problem-card {
+    background: var(--gray);
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .problem-card:hover { background: #333; }
+
+  .problem-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--accent);
+    transition: height 0.4s ease;
+  }
+
+  .problem-card:hover::before { height: 100%; }
+
+  .problem-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .problem-title {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .problem-text {
+    font-size: 14px;
+    color: rgba(245,240,232,0.55);
+    line-height: 1.7;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how {
+    padding: 100px 40px;
+    background: var(--gray);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .how::before {
+    content: '?';
+    position: absolute;
+    right: -40px;
+    top: -60px;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 400px;
+    color: rgba(255,255,255,0.02);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .how-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0;
+    margin-top: 60px;
+    position: relative;
+  }
+
+  .step {
+    padding: 40px 32px;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -12px;
+    top: 50px;
+    font-size: 24px;
+    color: var(--accent);
+    z-index: 2;
+  }
+
+  .step-num {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 64px;
+    color: rgba(232,75,42,0.15);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .step-title {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: var(--white);
+  }
+
+  .step-text {
+    font-size: 13px;
+    color: rgba(245,240,232,0.5);
+    line-height: 1.7;
+  }
+
+  /* ── TRUST ── */
+  .trust {
+    padding: 100px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    margin-top: 60px;
+  }
+
+  .trust-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .trust-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .trust-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(232,75,42,0.15);
+    border: 1px solid rgba(232,75,42,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .trust-item-title {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .trust-item-text {
+    font-size: 13px;
+    color: rgba(245,240,232,0.5);
+    line-height: 1.6;
+  }
+
+  .trust-visual {
+    background: var(--gray);
+    padding: 40px;
+    position: relative;
+  }
+
+  .review-card {
+    background: var(--black);
+    padding: 28px;
+    margin-bottom: 16px;
+    border-left: 3px solid var(--accent);
+    animation: pulse-border 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { border-left-color: var(--accent); }
+    50% { border-left-color: var(--accent2); }
+  }
+
+  .review-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    align-items: center;
+  }
+
+  .review-role {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .review-verified {
+    font-size: 10px;
+    color: #4caf50;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .review-stars {
+    color: var(--accent2);
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .review-text {
+    font-size: 13px;
+    color: rgba(245,240,232,0.7);
+    line-height: 1.6;
+  }
+
+  .review-period {
+    font-size: 11px;
+    color: rgba(245,240,232,0.35);
+    margin-top: 10px;
+  }
+
+  /* ── FORM ── */
+  .form-section {
+    background: var(--cream);
+    color: var(--black);
+    padding: 100px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form-section::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(232,75,42,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .form-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .form-inner .section-title {
+    color: var(--black);
+  }
+
+  .form-inner .section-label {
+    color: var(--accent);
+  }
+
+  .form-sub {
+    font-size: 16px;
+    color: rgba(13,13,13,0.6);
+    line-height: 1.6;
+    margin-bottom: 48px;
+  }
+
+  .email-form {
+    display: flex;
+    gap: 0;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .email-input {
+    flex: 1;
+    padding: 18px 24px;
+    border: 2px solid var(--black);
+    background: transparent;
+    font-family: 'Mulish', sans-serif;
+    font-size: 15px;
+    color: var(--black);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .email-input::placeholder { color: rgba(13,13,13,0.4); }
+  .email-input:focus { border-color: var(--accent); }
+
+  .submit-btn {
+    background: var(--black);
+    color: var(--white);
+    border: 2px solid var(--black);
+    padding: 18px 32px;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .submit-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .form-note {
+    font-size: 12px;
+    color: rgba(13,13,13,0.4);
+    margin-top: 16px;
+  }
+
+  .success-msg {
+    display: none;
+    background: var(--black);
+    color: var(--white);
+    padding: 20px 32px;
+    text-align: center;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #080808;
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-logo {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+    color: var(--white);
+  }
+
+  .footer-logo span { color: var(--accent); }
+
+  .footer-text {
+    font-size: 12px;
+    color: rgba(245,240,232,0.3);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .hero { padding: 100px 20px 160px; }
+    .hero-stats { right: 20px; bottom: 40px; flex-direction: row; gap: 20px; }
+    .stat { text-align: left; border-right: none; border-bottom: 2px solid var(--accent); padding-right: 0; padding-bottom: 8px; }
+    .problem, .trust { padding: 60px 20px; }
+    .how { padding: 60px 20px; }
+    .trust-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .step:not(:last-child)::after { content: '↓'; right: auto; left: 44px; top: auto; bottom: -16px; }
+    .form-section { padding: 60px 20px; }
+    .email-form { flex-direction: column; }
+    footer { padding: 30px 20px; flex-direction: column; text-align: center; }
+    .hero-stats { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Честно<span>Работаю</span></div>
+  <button class="nav-cta" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Оставить отзыв</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">🍽️ Для персонала общепита</div>
+    <h1>Знай куда<br>идёшь <em>работать</em></h1>
+    <p class="hero-sub">Анонимные отзывы официантов, барменов и поваров о реальных условиях работы в ресторанах и кафе. Никаких удалений по просьбе владельцев.</p>
+    <div class="hero-actions">
+      <a href="#signup" class="btn-primary">Оставить отзыв</a>
+      <a href="#how" class="btn-secondary">Как это работает</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">660К+</div>
+      <div class="stat-label">Заведений в России</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">95%</div>
+      <div class="stat-label">Читают отзывы перед работой</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Честные отзывы <span class="marquee-dot">•</span></span>
+    <span class="marquee-item">Анонимно <span class="marquee-dot">•</span></span>
+    <span class="marquee-item">Не удаляем <span class="marquee-dot">•</span></span>
+    <span class="marquee-item">Только общепит <span class="marquee-dot">•</span></span>
+    <span class="marquee-item">Реальный опыт <span class="marquee-dot">•</span></span>
+    <span class="marquee-item">Для своих <span class="marquee-dot">•</span></span>
+    <span class="marquee-item">Честные отзывы <span class="marquee-dot">•</span></span>
+    <span class="marquee-item">Анонимно <span class="marquee-dot">•</span></span>
+    <span class="marquee-item">Не удаляем <span class="marquee-dot">•</span></span>
+    <span class="marquee-item">Только общепит <span class="marquee-dot">•</span></span>
+    <span class="marquee-item">Реальный опыт <span class="marquee-dot">•</span></span>
+    <span class="marquee-item">Для своих <span class="marquee-dot">•</span></span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="section-label">Проблема</div>
+  <div class="section-title">Почему найти<br>нормальную работу<br>так сложно</div>
+  <div class="problems-grid">
+    <div class="problem-card">
+      <span class="problem-icon">🗑️</span>
+      <div class="problem-title">Плохие отзывы удаляют</div>
+      <p class="problem-text">Работодатели платят площадкам за удаление негатива. Ты видишь 5 звёзд — а попадаешь в ад.</p>
+    </div>
+    <div class="problem-card">
+      <span class="problem-icon">🎭</span>
+      <div class="problem-title">Обещают одно — делают другое</div>
+      <p class="problem-text">На собеседовании — белая зарплата, нормированный график, уважение. На деле — крики, серые выплаты и двойные смены.</p>
+    </div>
+    <div class="problem-card">
+      <span class="problem-icon">🔇</span>
+      <div class="problem-title">Коллеги молчат</div>
+      <p class="problem-text">Действующие сотрудники боятся говорить правду. Ты узнаёшь всё только когда уже устроился.</p>
+    </div>
+    <div class="problem-card">
+      <span class="problem-icon">💸</span>
+      <div class="problem-title">Чаевые исчезают</div>
+      <p class="problem-text">Часть заведений забирает чаевые в общак или урезает без объяснений. Об этом нигде не написано.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="how" id="how">
+  <div class="how-inner">
+    <div class="section-label">Как работает</div>
+    <div class="section-title">Просто и честно</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Находишь заведение</div>
+        <p class="step-text">Ищи по названию или городу. Если заведения нет — добавь сам за 30 секунд.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Оставляешь отзыв</div>
+        <p class="step-text">Анонимно. Оцениваешь честность выплат, руководство, график, условия — то что реально важно.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Коллеги подтверждают</div>
+        <p class="step-text">Другие бывшие сотрудники могут подтвердить отзыв. Это даёт метку "проверено сообществом".</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Принимаешь решение</div>
+        <p class="step-text">Видишь реальную картину до того как вышел на первую смену. Больше никаких сюрпризов.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust">
+  <div class="section-label">Почему нам доверяют</div>
+  <div class="section-title">Наши правила —<br>не как у других</div>
+  <div class="trust-grid">
+    <ul class="trust-list">
+      <li class="trust-item">
+        <div class="trust-icon">🔒</div>
+        <div>
+          <div class="trust-item-title">Не удаляем отзывы по просьбе</div>
+          <p class="trust-item-text">Ни за какие деньги. Отзыв удаляется только если содержит личные данные или прямую ложь с доказательствами.</p>
+        </div>
+      </li>
+      <li class="trust-item">
+        <div class="trust-icon">👻</div>
+        <div>
+          <div class="trust-item-title">Полная анонимность</div>
+          <p class="trust-item-text">Работодатель не видит кто написал. Никогда. Никаких имён в публичном доступе.</p>
+        </div>
+      </li>
+      <li class="trust-item">
+        <div class="trust-icon">✅</div>
+        <div>
+          <div class="trust-item-title">Верификация через детали</div>
+          <p class="trust-item-text">Фейк не пройдёт — при написании отзыва нужно указать конкретику, которую знает только тот кто работал.</p>
+        </div>
+      </li>
+      <li class="trust-item">
+        <div class="trust-icon">🍽️</div>
+        <div>
+          <div class="trust-item-title">Только для общепита</div>
+          <p class="trust-item-text">Не офисы, не заводы. Специфические критерии — чаевые, кухня для персонала, стоп-листы, отношения с кухней.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="trust-visual">
+      <div style="font-size:11px;color:rgba(245,240,232,0.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;">Пример отзыва</div>
+      <div class="review-card">
+        <div class="review-meta">
+          <span class="review-role">Официант</span>
+          <span class="review-verified">✓ Проверено сообществом</span>
+        </div>
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">"Чаевые платят честно, это главное. Из минусов — управляющий орёт в запару, еда для персонала нормальная. График держат как обещали."</p>
+        <div class="review-period">Работал: апрель–октябрь 2024 · Калуга</div>
+      </div>
+      <div style="font-size:12px;color:rgba(245,240,232,0.3);text-align:center;padding-top:8px;">3 коллеги подтвердили этот отзыв</div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="signup">
+  <div class="form-inner">
+    <div class="section-label">Присоединяйся</div>
+    <div class="section-title">Будь первым.<br>Помоги другим.</div>
+    <p class="form-sub">Оставь свой email — мы сообщим когда сервис запустится и дадим первым доступ. Плюс ты сможешь оставить первый отзыв о своём бывшем заведении.</p>
+    <form class="email-form" id="emailForm" onsubmit="handleSubmit(event)">
+      <input class="email-input" type="email" placeholder="твой@email.ru" required id="emailInput">
+      <button class="submit-btn" type="submit">Хочу первым</button>
+    </form>
+    <div class="success-msg" id="successMsg">🎉 Отлично! Мы напишем тебе при запуске.</div>
+    <p class="form-note">Никакого спама. Только одно письмо когда запустимся.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Честно<span>Работаю</span></div>
+  <div class="footer-text">Сервис для персонала общепита · 2025</div>
+  <div class="footer-text">Сделано человеком, который 12 лет был официантом</div>
+</footer>
+
+<script>
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const email = document.getElementById('emailInput').value;
+    document.getElementById('emailForm').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+    // Здесь можно подключить Formspree, Tally или любой другой сервис
+    console.log('Email:', email);
+  }
+
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.problem-card, .step, .trust-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
