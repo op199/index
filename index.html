@@ -583,7 +583,8 @@
 
   .email-form {
     display: flex;
-    gap: 0;
+    flex-direction: column;
+    gap: 12px;
     max-width: 480px;
     margin: 0 auto;
   }
@@ -849,13 +850,28 @@
   <div class="form-inner">
     <div class="section-label">Присоединяйся</div>
     <div class="section-title">Будь первым.<br>Помоги другим.</div>
-    <p class="form-sub">Оставь свой email — мы сообщим когда сервис запустится и дадим первым доступ. Плюс ты сможешь оставить первый отзыв о своём бывшем заведении.</p>
-    <form class="email-form" id="emailForm" onsubmit="handleSubmit(event)">
-      <input class="email-input" type="email" placeholder="твой@email.ru" required id="emailInput">
+    <p class="form-sub">
+      Оставь email или Telegram — сообщим когда сервис запустится.
+      Никакого спама.
+    </p>
+
+    <form class="email-form" id="leadForm" action="https://formspree.io/f/mojnboae" method="POST">
+      
+      <input type="hidden" name="source" value="landing_chestnorabotayu">
+
+      <input class="email-input" type="email" name="email" placeholder="твой@email.ru">
+      <input class="email-input" type="text" name="telegram" placeholder="или Telegram (@username)">
+
       <button class="submit-btn" type="submit">Хочу первым</button>
     </form>
-    <div class="success-msg" id="successMsg">🎉 Отлично! Мы напишем тебе при запуске.</div>
-    <p class="form-note">Никакого спама. Только одно письмо когда запустимся.</p>
+
+    <div class="success-msg" id="successMsg">
+      🎉 Отлично! Мы напишем тебе при запуске.
+    </div>
+
+    <p class="form-note">
+      Можно оставить что-то одно: email или Telegram.
+    </p>
   </div>
 </section>
 
@@ -877,14 +893,38 @@
   });
 
   // Form submit
-  function handleSubmit(e) {
-    e.preventDefault();
-    const email = document.getElementById('emailInput').value;
-    document.getElementById('emailForm').style.display = 'none';
-    document.getElementById('successMsg').style.display = 'block';
-    // Здесь можно подключить Formspree, Tally или любой другой сервис
-    console.log('Email:', email);
+  // Formspree submit
+document.getElementById('leadForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const email = form.querySelector('input[name="email"]').value.trim();
+  const telegram = form.querySelector('input[name="telegram"]').value.trim();
+
+  if (!email && !telegram) {
+    alert("Введите email или Telegram");
+    return;
   }
+
+  const formData = new FormData(form);
+
+  try {
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (response.ok) {
+      form.style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+    } else {
+      alert("Ошибка отправки. Попробуйте ещё раз.");
+    }
+  } catch (error) {
+    alert("Ошибка соединения.");
+  }
+});
 
   // Intersection Observer for fade-in
   const observer = new IntersectionObserver((entries) => {
